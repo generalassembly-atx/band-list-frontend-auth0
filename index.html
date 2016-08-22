@@ -8,14 +8,24 @@
   <body>
     <h1>Band List</h1>
 
+    <div id="welcome">
+      <h3>Welcome to Battle of the Bands App</h3>
+      <button type="button" id="login-button"></button>
+    </div>
+
     <form id="new-band-form">
       <input id="band-name" type="text" name="task" placeholder="Add band name">
       <input type="submit" value="Add Band">
     </form>
 
+    <div id="app" style='display: none;'>
+    <h3>Bands</h3>
+    <button type="button" id="logout-button">Logout</button>
     <ul id="band-list"></ul>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
     <script src="js/main.js" charset="utf-8"></script>
   </body>
 </html>
