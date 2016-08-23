@@ -1,3 +1,5 @@
+
+
 var lock = new Auth0Lock(
   'g03Xumx1DDGmrLzE2cZUjuonjE6WzDd9',
   'niran.auth0.com'
@@ -8,19 +10,17 @@ lock.on("authenticated", function(authResult) {
   lock.getProfile(authResult.idToken, function(error, profile) {
     if (error) {
     // Handle error
-
-
     return;
     }
 
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('profile', JSON.stringify(profile));
-    loadBands()
+    loadBandApp()
 
   });
 });
 $(document).ready(function () {
-  checkloggedIn()
+  checkLoggedIn()
   $('#login-button').on('click', function(e) {
     e.preventDefault()
     lock.show()
@@ -37,8 +37,8 @@ $(document).ready(function () {
 
 })
 
-function checkloggedIn() {
-if (isloggedIn()) {
+function checkLoggedIn() {
+if (isLoggedIn()) {
   loadBandApp()
 } else {
   return false;
