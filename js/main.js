@@ -24,8 +24,10 @@ $(document).ready(function () {
     e.preventDefault()
     lock.show()
   })
+
   $('#logout-button').on('click', function(e) {
     e.preventDefault()
+    logout()
   })
 })
 
