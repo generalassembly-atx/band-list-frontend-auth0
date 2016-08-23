@@ -4,18 +4,28 @@
   <head>
     <meta charset="utf-8">
     <title>Band List</title>
+
   </head>
   <body>
-    <h1>Band List</h1>
 
+  <div id="welcome">
+    <h1>Welcome to Bands</h1>
+    <button type="button" id="login-button">Login</button>
+  </div>
+
+   <div id="app" style="display: none;">
+    <h1>Band List</h1>
+    <button type="button" id="logout-button">Logout</button>
+    <br>
     <form id="new-band-form">
       <input id="band-name" type="text" name="name" placeholder="Add band name">
       <input type="submit" value="Add Band">
     </form>
 
     <ul id="band-list"></ul>
-
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-    <script src="js/main.js" charset="utf-8"></script>
+   </div>
+   <script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+   <script src="js/main.js" charset="utf-8"></script>
   </body>
 </html>

@@ -1,8 +1,75 @@
+var lock = new Auth0Lock(
+  // your Auth0 client id,
+  // your Auth0 domain
+);
+
+lock.on("authenticated", function(authResult) {
+  // Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    loadApp();
+  });
+});
+
 $(document).ready(function () {
+  checkLoggedIn();
+
+  $('#login-button').on('click', function (e) {
+    e.preventDefault();
+    console.log('login');
+    lock.show();
+  });
+
+  $('#logout-button').on('click', function (e) {
+    e.preventDefault();
+    logout();
+  })
+});
+
+function logout() {
+  localStorage.removeItem('id_token');
+  showWelcome();
+}
+
+function checkLoggedIn() {
+  if (isLoggedIn()) {
+    loadApp();
+  } else {
+    showWelcome();
+  }
+};
+
+function showWelcome() {
+  $('#welcome').show();
+  $('#app').hide();
+};
+
+function isLoggedIn() {
+  var idToken = localStorage.getItem('id_token');
+  if (idToken) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+function loadApp() {
+  showApp();
   loadBands()
   addNewBand()
   deleteBand()
-})
+};
+
+function showApp() {
+  $('#app').show();
+  $('#welcome').hide();
+}
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
