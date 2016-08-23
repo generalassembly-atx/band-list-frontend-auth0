@@ -20,6 +20,15 @@ lock.on("authenticated", function(authResult) {
   });
 });
 $(document).ready(function () {
+  login()
+  $('#login-button').on('click', function(e) {
+    e.preventDefault()
+    lock.show()
+  })
+  $('#logout-button').on('click', function(e) {
+    e.preventDefault()
+    logout()
+  })
   loadBands()
   addNewBand()
   deleteBand()
@@ -42,6 +51,10 @@ function loadBands() {
 }
 
 function showApp() {
+
+}
+
+function loadBandApp() {
 
 }
 
