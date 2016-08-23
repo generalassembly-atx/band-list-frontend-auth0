@@ -20,42 +20,58 @@ lock.on("authenticated", function(authResult) {
   });
 });
 $(document).ready(function () {
-  login()
+  checkloggedIn()
   $('#login-button').on('click', function(e) {
     e.preventDefault()
     lock.show()
   })
+
   $('#logout-button').on('click', function(e) {
     e.preventDefault()
     logout()
   })
+
   loadBands()
   addNewBand()
   deleteBand()
+
 })
 
-function login() {
-
+function checkloggedIn() {
+if (isloggedIn()) {
+  loadBandApp()
+} else {
+  return false;
+}
 }
 
 function logout() {
+  localStorage.removeItem('id_token')
+  showWelcome()
+}
 
+function isLoggedIn() {
+  var idToken = localStorage.getItem('id_token')
+  if (idToken) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function showWelcome() {
-
-}
-
-function loadBands() {
-
+  $('#welcome').show()
+  $('#app').hide()
 }
 
 function showApp() {
-
+  $('#app').show()
+  $('#welcome').hide()
 }
 
 function loadBandApp() {
-
+  loadBands()
+  showApp()
 }
 
 function deleteBand() {
