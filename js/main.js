@@ -1,8 +1,49 @@
+var lock = new Auth0Lock(
+  'g03Xumx1DDGmrLzE2cZUjuonjE6WzDd9',
+  'niran.auth0.com'
+);
+
+lock.on("authenticated", function(authResult) {
+// Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+    // Handle error
+
+
+    return;
+    }
+
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    loadBands()
+
+  });
+});
 $(document).ready(function () {
   loadBands()
   addNewBand()
   deleteBand()
 })
+
+function login() {
+
+}
+
+function logout() {
+
+}
+
+function showWelcome() {
+
+}
+
+function loadBands() {
+
+}
+
+function showApp() {
+
+}
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
