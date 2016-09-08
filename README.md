@@ -3,7 +3,7 @@
 We're going to revisit your band list app from last week. You are going to add Auth0 to your front end so that your app will only display your band list when a user is logged in.
 
 ## Steps
-#### Step 1: Fork and clone the homework rep 
+#### Step 1: Fork and clone the homework repo 
 - Just like always
 
 #### Step 2: Check the main.js file to ensure you are using the correct url for your AJAX calls
