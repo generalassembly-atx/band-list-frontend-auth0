@@ -4,6 +4,14 @@ $(document).ready(function () {
   deleteBand()
 })
 
+var lock = new Auth0Lock('KBoDe6JHtErBVYwfDyubAIku3OlJvMe9', 'nathanjensby.auth0.com', {
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+  });
+
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
     e.preventDefault()
@@ -56,7 +64,7 @@ function loadBand(band) {
   // Create an li on the fly
   var li = $('<li></li>')
   // I need a space to separate the task from the delete button
-  li.text(band.name + " ")
+  li.text(band.bandName + " ")
   // Create a link on the fly
   var a = $('<a>Delete</a>')
   // Add the href to the path for deleting the todo
