@@ -1,7 +1,60 @@
+var lock = new Auth0Lock('c4pFobE96YavypEEihgQRK7VDNrcT2dv', 'jordanwade.auth0.com', {
+   auth: {
+     params: {
+       scope: 'openid email'
+     }
+   }
+ });
+
+lock.on('authenticated',function (authResult) {
+  console.log(authResult);
+  localStorage.setItem('idToken', authResult.idToken);
+  showProfile();
+})
+
+function showProfile() {
+  $('#starter-text').hide();
+  $('#login-text').show();
+  lock.getProfile(localStorage.getItem('idToken'),function(err, profile) {
+    if (err) {
+      logout();
+    } else {
+      console.log('profile', profile);
+    }
+  })
+
+}
+function logout() {
+  localStorage.removeItem('idToken');
+  window.location.href = '/'
+  $('#login-text').hide()
+  $('#starter-text').show()
+}
+
+
 $(document).ready(function () {
-  loadBands()
-  addNewBand()
-  deleteBand()
+  $('#btn-login').on('click', function (e) {
+    e.preventDefault()
+    lock.show();
+  })
+  $('#btn-logout').on('click',function (e) {
+    console.log('hello');
+    e.preventDefault();
+    logout();
+  })
+  function isLoggedIn() {
+    if (localStorage.getItem('idToken')) {
+      loadBands();
+      showProfile();
+    }
+  }
+  if (isLoggedIn()) {
+    showProfile();
+  }
+
+  loadBands();
+  addNewBand();
+  deleteBand();
 })
 
 function deleteBand() {
@@ -38,11 +91,12 @@ function addNewBand() {
 }
 
 function loadBands() {
+
   $.ajax({
     url: 'http://localhost:3000/bands'
   })
   .done(function (data) {
-    // data in this case is the array of todos
+    
     data.forEach(function (datum) {
       // for each todo in the array, I want to add it to the <ul>
       // this is its own function because I also need to call this when
