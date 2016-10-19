@@ -1,8 +1,54 @@
 $(document).ready(function () {
+
+    var userProfile;
+
+  $('.btn-login').click(function(e) {
+    e.preventDefault();
+    lock.show();
+  });
+
+  $('#logout').click(function(e) {
+    e.preventDefault();
+    logout();
+  })
+
   loadBands()
   addNewBand()
   deleteBand()
+  showProfile()
 })
+
+function showProfile() {
+    $('#btn-login').hide();
+    $('#user-info').show();
+    lock.getProfile(localStorage.getItem('idToken'), function (error, profile) {
+      if (error){
+        logout();
+      } else {
+        console.log('profile', profile);
+        $('#fullName').text(profile.given_name);
+      }
+    })
+}
+
+function logout() {
+  localStorage.removeItem('idToken')
+  window.location.href = '/';
+}
+
+var lock = new Auth0Lock('GoBNjyrd7W9Jg1HECE7nH82QUhjTsM2B', 'jeauxy.auth0.com', {
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+});
+
+lock.on('authenticated', function (authResult) {
+    console.log(authResult);
+    localStorage.setItem('idToken', authResult.idToken);
+    loadBands();
+});
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
