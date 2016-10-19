@@ -1,8 +1,85 @@
+var lock = new Auth0Lock(
+  'aphtGA2Y2JTF523YF0iBDwzIMBwhZYBg',
+  'emptyfoster.auth0.com',
+  {
+  auth: {
+    params: {
+      scope: 'openid email'
+    }
+  }
+});
+
+
+lock.on("authenticated", function (authResult) {
+  console.log("authResult", authResult);
+  localStorage.setItem("idToken", authResult.idToken)
+  loadBands()
+})
+
 $(document).ready(function () {
+  $('#btn-login').on('click', function (e) {
+    e.preventDefault()
+    lock.show
+  })
+
+  $("#btn-logout").on("click", function (e) {
+    e.preventDefault()
+    logout();
+  })
+
+  if (isLoggedIn()) {
+    showUserProfile();
+  }
+
   loadBands()
   addNewBand()
   deleteBand()
-})
+
+});
+
+function isLoggedIn() {
+  if (localStorage.getItem('idToken')) {
+    return true
+  } else {
+    return false
+  }
+}
+
+
+function showUserProfile() {
+  $('#welcome').hide()
+  $("#login-text").show()
+  lock.getProfile(localStorage.getItem("idToken"), function (error, profile) {
+      if (error) {
+        logout()
+      }else {
+        console.log(profile);
+      }
+    })
+  }
+
+
+function logout() {
+  localStorage.removeItem('idToken')
+  window.location.href='/';
+  $('#login-text').hide()
+  $('#starter-text').show()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
