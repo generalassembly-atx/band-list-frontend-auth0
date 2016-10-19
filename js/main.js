@@ -1,8 +1,55 @@
+var lock = new Auth0Lock(
+    'EL84E1ESy2Z7eb9lzxHWT3FHF2NuyKul',
+    'kelvanince.auth0.com',
+    {
+      auth: {
+        params: {
+          scope: 'openid email'
+        }
+      }
+    });
+
+  lock.on('authenticated', function(authResult) {
+  console.log('authResult', authResult);
+  localStorage.setItem('idToken', authResult.idToken)
+  userOutput()
+})
+
+function userOutput() {
+    $('#btn-login').hide()
+    $('#user-info').show()
+    lock.getProfile(localStorage.getItem('idToken'), function (error, profile) {
+      if (error) {
+        logout()
+      } else {
+        console.log('profile', profile);
+        $('#avatar').attr('src', profile.picture)
+      }
+    })
+  }
+
+  $(document).ready(function() {
+    $('#btn-login').on('click', function(e) {
+      e.preventDefault();
+      lock.show();
+    })
+
+    $('#btn-logout').on('click', function(e) {
+      e.preventDefault();
+      logout();
+    })
+  })
+
 $(document).ready(function () {
   loadBands()
   addNewBand()
   deleteBand()
 })
+
+function logout() {
+    localStorage.removeItem('idToken')
+    window.location.href=('/');
+  }
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {

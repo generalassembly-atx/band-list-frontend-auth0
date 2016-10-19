@@ -2,8 +2,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Band List</title>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+     <title>Band List</title>
+     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+     <script src="http://cdn.auth0.com/js/lock/10.4/lock.min.js"></script>
+     <script src="js/main.js" charset="utf-8"></script>
   </head>
   <body>
     <h1>Band List</h1>
@@ -15,7 +19,13 @@
 
     <ul id="band-list"></ul>
 
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-    <script src="js/main.js" charset="utf-8"></script>
+ <h1>Welcome</h1>
+  <button type="button" id='btn-login'>Click here</button>
+  <div id="user-info" style="display: none">
+  <!-- <h1 id="username"></h1> -->
+
+  <button type="button" id='btn-logout'>logout</button>
+  </div>
+    
   </body>
 </html>
