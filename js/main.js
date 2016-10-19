@@ -1,16 +1,10 @@
+
 $(document).ready(function () {
   loadBands()
   addNewBand()
   deleteBand()
 })
 
-var lock = new Auth0Lock('KBoDe6JHtErBVYwfDyubAIku3OlJvMe9', 'nathanjensby.auth0.com', {
-    auth: {
-      params: {
-        scope: 'openid email'
-      }
-    }
-  });
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
