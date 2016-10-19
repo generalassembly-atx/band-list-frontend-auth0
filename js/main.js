@@ -6,11 +6,16 @@ $(document).ready(function () {
     e.preventDefault();
     lock.show();
   });
-  
+
   loadBands()
   addNewBand()
   deleteBand()
 })
+
+function logout() {
+  localStorage.removeItem('idToken')
+  window.location.href = '/';
+}
 
 var lock = new Auth0Lock('GoBNjyrd7W9Jg1HECE7nH82QUhjTsM2B', 'jeauxy.auth0.com', {
     auth: {
@@ -18,6 +23,12 @@ var lock = new Auth0Lock('GoBNjyrd7W9Jg1HECE7nH82QUhjTsM2B', 'jeauxy.auth0.com',
         scope: 'openid email'
       }
     }
+});
+
+lock.on('authenticated', function (authResult) {
+    console.log(authResult);
+    localStorage.setItem('idToken', authResult.idToken);
+    loadBands();
 });
 
 function deleteBand() {
