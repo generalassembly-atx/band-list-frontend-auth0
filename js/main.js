@@ -6,13 +6,32 @@ var lock = new Auth0Lock('KBoDe6JHtErBVYwfDyubAIku3OlJvMe9', 'nathanjensby.auth0
     }
   });
 
+lock.on("authenticated", function(authResult) {
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+
+    localStorage.setItem('idToken', authResult.idToken);
+    loadBands()
+    $('#logout, #new-band-form').show();
+    $('#login').hide();
+  })
+})
+
+
 $(document).ready(function () {
-  loadBands()
   addNewBand()
   deleteBand()
  $('#login').on('click', function (e) {
    e.preventDefault();
    lock.show();
+ })
+
+ $('#logout').on('click',function (e) {
+   e.preventDefault();
+   logout();
  })
 })
 
@@ -80,4 +99,9 @@ function loadBand(band) {
   li.append(a)
   // Add li to the ul
   $('#band-list').append(li)
+}
+
+function logout() {
+    localStorage.removeItem('idToken');
+    window.location.href='/';
 }
