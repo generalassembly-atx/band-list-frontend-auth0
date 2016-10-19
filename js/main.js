@@ -7,6 +7,11 @@ $(document).ready(function () {
     lock.show();
   });
 
+  $('#logout').click(function(e) {
+    e.preventDefault();
+    logout();
+  })
+
   loadBands()
   addNewBand()
   deleteBand()
@@ -23,7 +28,7 @@ function showProfile() {
         console.log('profile', profile);
         $('#fullName').text(profile.given_name);
       }
-  })
+    })
 }
 
 function logout() {
