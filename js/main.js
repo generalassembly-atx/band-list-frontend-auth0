@@ -1,8 +1,68 @@
+var lock = new Auth0Lock('scmba0vd8LXHO7Roa5OmImGnhfu6PLEd', 'clintgrounds.auth0.com',
+{
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+  });
+
+  lock.on("authenticated", function(authResult) {
+  // Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    localStorage.setItem('idToken', authResult.idToken);
+    initiateLogin();
+  });
+});
+
+
 $(document).ready(function () {
+  $('#btn-login').on('click', function (e) {
+     e.preventDefault()
+     lock.show()
+  })
+  $('#btn-logout').on('click', function (e) {
+    e.preventDefault()
+    logout()
+  })
+
   loadBands()
-  addNewBand()
-  deleteBand()
+  addNewBand()
+  deleteBand()
+
 })
+
+function initiateLogin() {
+  $('.welcome').hide();
+  $('.band-list').show();
+  lock.getProfile(localStorage.getItem('idToken'), function (error, profile) {
+  if (error) {
+    logout()
+  }else{
+    console.log(profile);
+  }
+  })
+}
+// LOGOUT
+function logout() {
+  localStorage.removeItem('idToken')
+   window.location.href = '/';
+  }
+
+  function isLoggedIn() {
+    if (localStorage.getItem('idToken')) {
+      return isJwtValid();
+    } else {
+      return false;
+    }
+  }
+
+  function isJwtValid() {
+    var token = localStorage.getItem('idToken')
+    if (!token) {
+      return false;
+    }
+  }
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
@@ -20,6 +80,10 @@ function deleteBand() {
       link.parent('li').remove()
     })
   })
+ $('#btn-logout').on('click', function (e) {
+    e.preventDefault()
+    logout()
+  })
 }
 
 function addNewBand() {
