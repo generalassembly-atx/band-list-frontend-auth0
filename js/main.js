@@ -1,8 +1,61 @@
 $(document).ready(function () {
-  loadBands()
-  addNewBand()
-  deleteBand()
-})
+
+  $('.btn-login').click(function(e) {
+    e.preventDefault();
+    lock.show();
+  });
+
+  $('.btn-logout').on('click', function (e) {
+    e.preventDefault();
+    logout();
+  });
+
+  if (isLoggedIn()) {
+    showProfile();
+  }
+});
+
+var lock = new Auth0Lock('xok7Cc3nkGe9A1gfCTv8AsFX7ivbo0Jz', 'clrksanford.auth0.com', {
+  auth: {
+    params: {
+      scope: 'openid email'
+    }
+  }
+});
+
+var userProfile;
+
+lock.on("authenticated", function(authResult) {
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+
+    localStorage.setItem('id_token', authResult.idToken);
+
+    localStorage.setItem('name', profile.name);
+    localStorage.setItem('avatar', profile.picture);
+
+    showProfile();
+  });
+});
+
+function loadBands() {
+  $.ajax({
+    url: 'http://localhost:3000/bands'
+  })
+  .done(function (data) {
+ //    data in this case is the array of bands
+    data.forEach(function (datum) {
+
+      // for each todo in the array, I want to add it to the <ul>
+      // this is its own function because I also need to call this when
+      // a new form is created
+      loadBand(datum);
+    });
+  });
+}
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
@@ -28,28 +81,17 @@ function addNewBand() {
     $.ajax({
       url: 'http://localhost:3000/bands',
       method: 'POST',
-      data: $('#new-band-form').serialize()
+      data: {
+        name: $('#band-name').val(),
+        genre: 'pop-rock',
+        corruptedByTheSystem: true
+      }
     })
     .done(function (newBand) {
       loadBand(newBand)
       $('#band-name').val('').focus()
-    })
-  })
-}
-
-function loadBands() {
-  $.ajax({
-    url: 'http://localhost:3000/bands'
-  })
-  .done(function (data) {
-    // data in this case is the array of todos
-    data.forEach(function (datum) {
-      // for each todo in the array, I want to add it to the <ul>
-      // this is its own function because I also need to call this when
-      // a new form is created
-      loadBand(datum);
-    })
-  })
+    });
+  });
 }
 
 function loadBand(band) {
@@ -67,4 +109,37 @@ function loadBand(band) {
   li.append(a)
   // Add li to the ul
   $('#band-list').append(li)
+}
+
+function showProfile() {
+  $('.btn-login').addClass('hidden');
+  $('.btn-logout').removeClass('hidden');
+  $('h2').removeClass('hidden');
+  $('div.hidden').removeClass('hidden');
+  $('span').text(localStorage.getItem('name'));
+  $('#avatar').attr('src', localStorage.getItem('avatar'));
+
+  loadBands();
+  addNewBand();
+  deleteBand();
+}
+
+function isLoggedIn() {
+  if(localStorage.getItem('idToken')) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function logout() {
+  localStorage.removeItem('idToken');
+  localStorage.removeItem('name');
+  localStorage.removeItem('avatar');
+  userProfile = null;
+  window.location.href = "/";
+  // $('.btn-login').removeClass('hidden');
+  // $('.btn-logout').addClass('hidden');
+  // $('h2').addClass('hidden');
+  // $('div').addClass('hidden');
 }
