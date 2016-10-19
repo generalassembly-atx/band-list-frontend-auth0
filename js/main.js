@@ -1,8 +1,59 @@
 $(document).ready(function () {
-  loadBands()
+  if (isLoggedIn()) {
+    loggedIn();
+  }
   addNewBand()
   deleteBand()
 })
+
+function isLoggedIn(){
+  var token = localStorage.idToken;
+  if (token) {
+    return true;
+  } else {
+    return false;
+  }
+}
+// Initiating our Auth0Lock
+var lock = new Auth0Lock(
+  'CMjl5BsyR0H6DF0BD7dK4dEFlSAmKREA',
+  'ab010.auth0.com'
+);
+// Listening for the authenticated event
+lock.on("authenticated", function(authResult) {
+  // Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+    localStorage.setItem('idToken', authResult.idToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    loggedIn();
+  });
+});
+
+function loggedIn() {
+  $('#welcome').hide();
+  $('#logged-in').show();
+  loadBands()
+}
+
+
+// Showing lock
+document.getElementById('btn-login').addEventListener('click', function() {
+  lock.show();
+});
+
+// LOGOUT
+document.getElementById('btn-logout').addEventListener('click', function() {
+  localStorage.removeItem('idToken');
+  localStorage.removeItem('profile');
+  window.location.href = "/";
+})
+
+
+
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
