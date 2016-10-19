@@ -1,8 +1,77 @@
+var lock = new Auth0Lock(
+  'HWdUFLDqCisKAriOT4f0HuwohQ9aRSph',
+  'corvuscorax.auth0.com'
+);
+
+lock.on("authenticated", function(authResult) {
+  // Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    loadBandApp()
+  });
+});
+
+
 $(document).ready(function () {
-  loadBands()
-  addNewBand()
-  deleteBand()
+  checkLoggedIn()
+  $('#login-button').on('click', function(e) {
+    e.preventDefault()
+    lock.show()
+  })
+
+  $('#logout-button').on('click', function(e) {
+    e.preventDefault()
+    logout()
+  })
 })
+
+function logout() {
+  localStorage.removeItem('id_token')
+  showWelcome()
+}
+
+
+function checkLoggedIn() {
+  if (isLoggedIn()) {
+    loadBandApp()
+  } else {
+    showWelcome()
+  }
+}
+
+function showWelcome() {
+  $('#welcome').show()
+  $('#app').hide()
+}
+
+function showApp() {
+  $('#app').show()
+  $('#welcome').hide()
+}
+
+function isLoggedIn() {
+  var idToken=localStorage.getItem('id_token')
+  if (idToken) {
+  return true;
+  } else {
+  return false;
+  }
+}
+
+function loadBandApp() {
+  showApp()
+  loadBands()
+  addNewBand()
+  deleteBand()
+}
+
+
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
