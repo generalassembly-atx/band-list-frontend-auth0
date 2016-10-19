@@ -1,8 +1,84 @@
-$(document).ready(function () {
+var lock = new Auth0Lock('fFqXx1ZXREH9i36iFFPKAiwACZOS2MQV', 'gabrieldiaz.auth0.com', {
+  auth: {
+    params: {
+      scope: 'openid email'
+    }
+  }
+});
+
+lock.on('authenticated', function (authResult) {
+  console.log('authResult', authResult);
+  // save token
+  localStorage.setItem('idToken', authResult.idToken)
   loadBands()
+  // instead of loadBands get it to run function to load bands-section
+})
+
+
+$(document).ready(function () {
+  // loadBands()
   addNewBand()
   deleteBand()
+
+  // $('#bands-section').hide()
+ $('#btn-login').on('click', function (e) {
+   e.preventDefault()
+   lock.show()
+   console.log('login works');
+ })
+
+ if (isLoggedIn()) {
+    showBandsSection();
+    loadBands();
+
+  }
+
 })
+
+$('#btn-logout').on('click', function(e) {
+    e.preventDefault()
+    console.log('logout working');
+    logout()
+  })
+
+function logout() {
+  localStorage.removeItem('idToken')
+  // refresh page
+  window.location.href='/';
+}
+
+
+function showBandsSection() {
+  console.log('showBandsSection()');
+  // $('#bands-section').hide()
+  lock.getProfile(localStorage.getItem('idToken'), function (error, profile) {
+    if (error) {
+      logout()
+    } else {
+      console.log('profile', profile)
+
+    }
+  })
+}
+
+function isLoggedIn() {
+  if (localStorage.getItem('idToken')) {
+    return isJwtValid();
+  } else {
+    return false;
+  }
+}
+
+
+function isJwtValid() {
+  var token = localStorage.getItem('idToken')
+  if (!token) {
+    return false;
+  }
+  var encodedPayload = token.split('.')[1]
+  console.log('encodedPayload', encodedPayload);
+}
+
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
@@ -16,7 +92,7 @@ function deleteBand() {
       method: 'DELETE'
     })
     .done(function () {
-      // Find the li that this link belongs to and remove it from the DOM
+      
       link.parent('li').remove()
     })
   })
@@ -48,6 +124,7 @@ function loadBands() {
       // this is its own function because I also need to call this when
       // a new form is created
       loadBand(datum);
+
     })
   })
 }
@@ -67,4 +144,5 @@ function loadBand(band) {
   li.append(a)
   // Add li to the ul
   $('#band-list').append(li)
+
 }
