@@ -1,8 +1,40 @@
+var lock = new Auth0Lock('KBoDe6JHtErBVYwfDyubAIku3OlJvMe9', 'nathanjensby.auth0.com', {
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+  });
+
+lock.on("authenticated", function(authResult) {
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+      // Handle error
+      return;
+    }
+
+    localStorage.setItem('idToken', authResult.idToken);
+    loadBands()
+    $('#logout, #new-band-form').show();
+    $('#login').hide();
+  })
+})
+
+
 $(document).ready(function () {
-  loadBands()
   addNewBand()
   deleteBand()
+ $('#login').on('click', function (e) {
+   e.preventDefault();
+   lock.show();
+ })
+
+ $('#logout').on('click',function (e) {
+   e.preventDefault();
+   logout();
+ })
 })
+
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
@@ -56,7 +88,7 @@ function loadBand(band) {
   // Create an li on the fly
   var li = $('<li></li>')
   // I need a space to separate the task from the delete button
-  li.text(band.name + " ")
+  li.text(band.bandName + " ")
   // Create a link on the fly
   var a = $('<a>Delete</a>')
   // Add the href to the path for deleting the todo
@@ -67,4 +99,9 @@ function loadBand(band) {
   li.append(a)
   // Add li to the ul
   $('#band-list').append(li)
+}
+
+function logout() {
+    localStorage.removeItem('idToken');
+    window.location.href='/';
 }
