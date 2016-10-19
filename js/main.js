@@ -10,7 +10,21 @@ $(document).ready(function () {
   loadBands()
   addNewBand()
   deleteBand()
+  showProfile()
 })
+
+function showProfile() {
+    $('#btn-login').hide();
+    $('#user-info').show();
+    lock.getProfile(localStorage.getItem('idToken'), function (error, profile) {
+      if (error){
+        logout();
+      } else {
+        console.log('profile', profile);
+        $('#fullName').text(profile.given_name);
+      }
+  })
+}
 
 function logout() {
   localStorage.removeItem('idToken')
