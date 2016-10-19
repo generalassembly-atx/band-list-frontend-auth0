@@ -1,8 +1,78 @@
+
+
+var lock = new Auth0Lock(
+  'g03Xumx1DDGmrLzE2cZUjuonjE6WzDd9',
+  'niran.auth0.com'
+);
+
+lock.on("authenticated", function(authResult) {
+// Use the token in authResult to getProfile() and save it to localStorage
+  lock.getProfile(authResult.idToken, function(error, profile) {
+    if (error) {
+    // Handle error
+    return;
+    }
+
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    loadBandApp()
+
+  });
+});
 $(document).ready(function () {
+  checkLoggedIn()
+  $('#login-button').on('click', function(e) {
+    e.preventDefault()
+    lock.show()
+  })
+
+  $('#logout-button').on('click', function(e) {
+    e.preventDefault()
+    logout()
+  })
+
   loadBands()
   addNewBand()
   deleteBand()
+
 })
+
+function checkLoggedIn() {
+if (isLoggedIn()) {
+  loadBandApp()
+} else {
+  return false;
+}
+}
+
+function logout() {
+  localStorage.removeItem('id_token')
+  showWelcome()
+}
+
+function isLoggedIn() {
+  var idToken = localStorage.getItem('id_token')
+  if (idToken) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function showWelcome() {
+  $('#welcome').show()
+  $('#app').hide()
+}
+
+function showApp() {
+  $('#app').show()
+  $('#welcome').hide()
+}
+
+function loadBandApp() {
+  loadBands()
+  showApp()
+}
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
