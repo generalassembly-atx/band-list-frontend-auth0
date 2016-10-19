@@ -2,20 +2,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Band List</title>
   </head>
   <body>
-    <h1>Band List</h1>
+
+    <h1>Welcome! <span id="fullName"></span></h1>
+    <br>
+    <button type="button" id="btn-login">Click Here To Login</button>
+
+      <div id="user-info" style="display: none">
+        <h1 id="username"></h1>
+        <button id="logout">Logout</button>
+ <!-- <h1>Band List</h1>
 
     <form id="new-band-form">
       <input id="band-name" type="text" name="task" placeholder="Add band name">
       <input type="submit" value="Add Band">
-    </form>
+    </form> -->
 
-    <ul id="band-list"></ul>
+      <ul id="band-list"></ul>
 
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script src="https://cdn.auth0.com/js/lock/10.4/lock.min.js"></script>
     <script src="js/main.js" charset="utf-8"></script>
   </body>
 </html>

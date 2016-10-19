@@ -1,8 +1,24 @@
 $(document).ready(function () {
+
+    var userProfile;
+
+  $('.btn-login').click(function(e) {
+    e.preventDefault();
+    lock.show();
+  });
+  
   loadBands()
   addNewBand()
   deleteBand()
 })
+
+var lock = new Auth0Lock('GoBNjyrd7W9Jg1HECE7nH82QUhjTsM2B', 'jeauxy.auth0.com', {
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+});
 
 function deleteBand() {
   $(document).on('click', 'a.delete-band', function (e) {
