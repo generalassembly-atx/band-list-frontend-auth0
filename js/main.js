@@ -1,8 +1,19 @@
+var lock = new Auth0Lock('KBoDe6JHtErBVYwfDyubAIku3OlJvMe9', 'nathanjensby.auth0.com', {
+    auth: {
+      params: {
+        scope: 'openid email'
+      }
+    }
+  });
 
 $(document).ready(function () {
   loadBands()
   addNewBand()
   deleteBand()
+ $('#login').on('click', function (e) {
+   e.preventDefault();
+   lock.show();
+ }
 })
 
 
